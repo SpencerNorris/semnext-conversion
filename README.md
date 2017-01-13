@@ -24,6 +24,8 @@ includes the DOID ID, DOID name, evidence, source, confidence and see_also URI.
 
 6) Begins update of knowledge graph. This is where it gets hairy in the code since everything needs to be streamed to avoid hitting memory limits (`TODO`: memory consumption still goes up during the final merge, not sure why. See if we can fix this; would reduce needed memory by ~1Gb; otherwise you need to bump the settings in the Vagrantfile).
 
+- `Note`: if you update the tabular files, you need to delete any existing files in `output` before you run again; otherwise, the script will see them and skip them (this was done to reduce run times when iterating on existing work).
+
 - Extract any quads from Cortecon subgraphs in the existing SemNExT dump that pertain to the cluster analyses or TCONS data, write these out to `preserved-quads.nq`
 - Strip the SemNExT dump of all Cortecon subgraphs (there are currently subgraphs for each and every disease and gene); write this stripped dump to `cleaned-quads.nq`
 - Merge `preserved-quads.nq` and `cleaned-quads.nq` and write to `merged-preserved-cleaned-quads.nq`
