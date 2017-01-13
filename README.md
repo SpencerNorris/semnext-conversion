@@ -22,7 +22,7 @@ includes the DOID ID, DOID name, evidence, source, confidence and see_also URI.
 - subgraph for gene data (https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/gene/)
 - `TODO`: This step needs to be done manually. The `main.py` script bombs out halfway through, at which point you invoke Setlr, comment out the actual call to Setlr in `main.py` and re-run the whole thing. This isn't terrible inefficient (adds ~30 seconds in total) but it is confusing and doesn't lend itself to integration. MUST FIX.
 
-6) Begins update of knowledge graph. This is where it gets hairy in the code since everything needs to be streamed to avoid hitting memory limits.
+6) Begins update of knowledge graph. This is where it gets hairy in the code since everything needs to be streamed to avoid hitting memory limits (`TODO`: memory consumption still goes up during the final merge, not sure why. See if we can fix this; would reduce needed memory by ~1Gb; otherwise you need to bump the settings in the Vagrantfile).
 
 - Extract any quads from Cortecon subgraphs in the existing SemNExT dump that pertain to the cluster analyses or TCONS data, write these out to `preserved-quads.nq`
 - Strip the SemNExT dump of all Cortecon subgraphs (there are currently subgraphs for each and every disease and gene); write this stripped dump to `cleaned-quads.nq`
