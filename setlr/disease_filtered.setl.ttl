@@ -1,0 +1,123 @@
+@prefix prov:          <http://www.w3.org/ns/prov#> .
+@prefix dcat:          <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix void:          <http://rdfs.org/ns/void#> .
+@prefix setl:          <http://purl.org/twc/vocab/setl/> .
+@prefix csvw:          <http://www.w3.org/ns/csvw#> .
+@prefix pv:            <http://purl.org/net/provenance/ns#> .
+@prefix cortecon:      <https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/disease/> .
+@prefix semnext:       <https://semnext.tw.rpi.edu/ontology/semnext#> .
+@prefix xsd: 	       <http://www.w3.org/2001/XMLSchema#> .
+@prefix :              <http://example.com/setl/> .
+
+:table a csvw:Table, setl:Table;
+  csvw:delimiter "," ;
+  prov:wasGeneratedBy [
+    a setl:Extract ;
+    prov:used <data/output/cortecon-jensen-intersection.csv> ;
+  ].
+
+
+<https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/disease/disease-extraction>
+	a void:Dataset;
+	prov:wasGeneratedBy [
+		a setl:Transform, setl:JSLDT ;
+		prov:used :table;
+		setl:hasContext '''{
+			"xsd" : "http://www.w3.org/2001/XMLSchema#",
+			"prov": "http://www.w3.org/ns/prov#",
+			"owl": "http://www.w3.org/2002/07/owl#",
+			"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+			"dcterms": "http://purl.org/dc/terms/",
+			"DOID": "https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/disease/",
+			"cortecon": "https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/gene/",
+			"cortecon-o": "https://semnext.tw.rpi.edu/ontology/cortecon#",
+			"semnext": "https://semnext.tw.rpi.edu/ontology/semnext#",
+			"enhancement": "http://semnext.tw.rpi.edu/source/semnext-tw-rpi-edu/dataset/gene-analysis/vocab/enhancement/1/",
+			"umls": "https://mobilehealth.tw.rpi.edu/ontology/umls#"
+		}''' ;
+		prov:value '''[
+		{
+			"@id": "https://semnext.tw.rpi.edu/mappings",
+			"@graph": [
+				{
+					"@id": "cortecon:{{row.Entrez_ID}}",
+					"owl:sameAs": { "@id": "http://semnext.tw.rpi.edu/id/gene/{{row.Entrez_ID}}" }
+				},
+				{
+					"@id": "http://semnext.tw.rpi.edu/id/gene/{{row.Entrez_ID}}",
+					"owl:sameAs": { "@id": "cortecon:{{row.Entrez_ID}}" }	
+				}			
+			]
+		},
+		{
+			"@id": "https://semnext.tw.rpi.edu/mapping/https",
+			"@graph": [
+				{
+					"@id": "http://semnext.tw.rpi.edu/id/gene/{{row.Entrez_ID}}",
+					"owl:sameAs": { "@id": "https://semnext.tw.rpi.edu/id/gene/{{row.Entrez_ID}}" }
+				}
+			]
+		},	
+		{
+			"@id": "https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/",
+			"@graph": [
+				{
+					"@id": "https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/disease/",
+					"@graph": [
+						{
+							"@id": "{{row.Disease_Ontology_ID}}",
+							"@type": [ "prov:Entity", "https://mobilehealth.tw.rpi.edu/id/umls-sn/Disease_or_Syndrome" ],
+							"rdfs:label": {
+								"@if": "not isempty(row.Disease_Name)",
+								"@value": "{{row.Disease_Name}}"
+							},
+							"dcterms:identifier": "{{row.Disease_Ontology_ID.replace('DOID:','')}}",
+							"rdfs:see_also": {
+								"@if": "not isempty(row.see_also)",
+								"@id": "{{row.see_also}}"
+							},
+							"cortecon-o:associated-gene": {"@id": "cortecon:{{row.Entrez_ID}}"}
+						}
+					]
+				},
+				{
+					"@id": "https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/gene/",
+					"@graph": [
+						{
+							"@id": "cortecon:{{row.Entrez_ID}}",
+							"@type": [ "prov:Entity", "semnext:Gene" ],
+							"semnext:entrezId": "{{row.Entrez_ID}}",
+							"dcterms:identifier": "{{row.Entrez_ID}}",
+							"cortecon-o:x-entrez": "{{row.Entrez_ID}}",
+							"cortecon-o:synonym": "{{row.Gene_Symbol}}",
+							"cortecon-o:associatedWithDisease": { "@id": "{{row.Disease_Ontology_ID}}" },
+							"umls:genesymbol": "{{row.Gene_Symbol}}",
+							"rdfs:label": "{{row.Gene_Symbol}}"
+						},
+						{
+							"@id": "http://semnext.tw.rpi.edu/id/gene/{{row.Entrez_ID}}",
+							"@type": [ "prov:Entity", "semnext:Gene" ]
+						}
+					]
+				},
+				{
+					"@id": "http://semnext.tw.rpi.edu/id/gene/{{row.Entrez_ID}}",
+					"enhancement:gene_symbol": "{{row.Gene_Symbol}}",
+					"owl:sameAs": {
+						"@if": "row.Entrez_ID.isdigit()",
+						"@id": "http://bio2rdf.org/ncbigene:{{row.Entrez_ID}}"
+					}
+				}
+			]
+		}]''' ;
+	].
+
+
+<data/output/disease.trig> a pv:File;
+	dcterms:format "application/trig";
+	prov:wasGeneratedBy [
+		a setl:Load;
+		prov:used
+		  <https://semnext.tw.rpi.edu/id/source/cortecon-neuralsci-org/cortecon/disease/disease-extraction> ;
+	].    
