@@ -14,6 +14,14 @@ $ gunzip ./semnext-dump.nq.gz
 ```
 The `${VERSION}` variable should be replaced with the latest version of the knowledge graph. As of 02/12/2017, this is `0.1.3`. 
 
+Additionally. you'll have unzip `disease_filtered.csv.gz` (the file was originally too large to push to Github).
+```
+$ cd ../tabular
+$ gunzip disease_filtered.csv.gz
+```
+
+You should be good to start the update after this!
+
 <h2>Description of Pipeline</h2>
 
 1) Iterates through Jensen dataset and pulls in all genes listed for a DOID identifier (e.g. skips all ICD10 associations).
