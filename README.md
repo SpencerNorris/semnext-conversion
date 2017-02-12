@@ -1,7 +1,20 @@
 # semnext-conversion
 Raw conversion code for SemNExT knowledge graph
 
-Description of Pipeline
+<h2>First order of business</h2>
+
+You'll need the current version of the SemNExT knowledge graph in order to perform the update. This isn't included in the repo since the graph is exceptionally large.
+
+Run the following commands:
+
+```
+$ cd ./data/quads
+$ curl https://semnext.tw.rpi.edu/data/source/semnext-tw-rpi-edu/semnext/version/${VERSION}/semnext-${VERSION}.nq.gz" > semnext-dump.nq.gz
+$ gunzip ./semnext-dump.nq.gz
+```
+The `${VERSION}` variable should be replaced with the latest version of the knowledge graph. As of 02/12/2017, this is `0.1.3`. 
+
+<h2>Description of Pipeline</h2>
 
 1) Iterates through Jensen dataset and pulls in all genes listed for a DOID identifier (e.g. skips all ICD10 associations).
 If the Entrez ID isn't available, uses the gene symbol instead (most commonly an HGNC symbol). This is our 'cleaned' Jensen data.
