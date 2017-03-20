@@ -8,6 +8,7 @@ You'll need the current version of the SemNExT knowledge graph in order to perfo
 Run the following commands:
 
 ```
+$ mkdir ./data/quads
 $ cd ./data/quads
 $ curl https://semnext.tw.rpi.edu/data/source/semnext-tw-rpi-edu/semnext/version/${VERSION}/semnext-${VERSION}.nq.gz" > semnext-dump.nq.gz
 $ gunzip ./semnext-dump.nq.gz
